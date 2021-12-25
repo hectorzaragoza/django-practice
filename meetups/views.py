@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Meetup
 
+from meetups.forms import RegistrationForm
+from .models import Meetup
 # Create your views here.
 
 # index will take in the request parameter automatically by django.
@@ -31,10 +32,12 @@ def index(request):
 def meetup_details(request, meetup_slug):
     try:
         selected_meetup = Meetup.objects.get(slug=meetup_slug)
+        registration_form = RegistrationForm() 
         return render(request, 'meetups/meetup-details.html', {
             'meetup_found': True,
-            'meetup_title': selected_meetup.title,
-            'meetup_description': selected_meetup.description})
+            'meetup': selected_meetup,
+            'form': registration_form
+        })
     except Exception as exc:
         return render(request, 'meetups/meetup-details.html', {
             'meetup_found': False
